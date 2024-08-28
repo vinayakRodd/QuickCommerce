@@ -71,7 +71,7 @@ function Cart({GetOrderId,setGetOrderId,CustId,setCustId,CheckOutStatus,setCheck
 
 
 
-      await axios.post("http://localhost:9000/api/Orders/addOrders",myOrders)
+      await axios.post("http://localhost:9000/api/AddOrders",myOrders)
       .then(response=>{
 
           alert("Orders successfully Added")

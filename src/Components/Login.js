@@ -14,7 +14,7 @@ function Login({CustId,setCustId,UserName,setUserName,loginStatus,setLoginStatus
     const authenticate = () =>{
 
 
-        axios.get("http://localhost:9000/api/Customer/authenticate/"+login.current.value)
+        axios.get("http://localhost:9000/api/authenticate/"+login.current.value)
         .then(response=>{
 
             

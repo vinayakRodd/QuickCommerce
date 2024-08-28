@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const bp = require('body-parser')
-
+const Product = require('./Product')
 // const product = require('./Product') // Import Product.js.. This is not required while Maknig Connection with MongoDb//
 const myDb = require('./MongoConnect')
 const { urlencoded } = require('body-parser')
@@ -17,6 +17,7 @@ App.use(bp.json())
 App.use(express.urlencoded({ extended: false}))
 // App.use("/api/Products",product) // This is for MySQl Connection note this..Routing Purpose //
 
+App.use("/api/Product",Product)
 
 App.get("/api/authenticate/:UserName",async(req,resp)=>{
 
