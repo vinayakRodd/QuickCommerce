@@ -64,18 +64,30 @@ function Cart({GetOrderId,setGetOrderId,CustId,setCustId,CheckOutStatus,setCheck
       setOrderId(OrderId+1)
       setGetOrderId(OrderId+1)
       
-      const currentDate = now.toLocaleDateString();  // Formats the date (e.g., "8/23/2024")
+      const currentDate = now.toLocaleDateString('en-GB');  // Formats the date (e.g., "8/23/2024")
       const currentTime = now.toLocaleTimeString();  // Formats the time (e.g., "4:35:18 PM")
 
       const myOrders = [{GTotal:GTotal,Date:currentDate,Time:currentTime,OrderId:OrderId,CustId:CustId}]
 
 
 
-      await axios.post("http://localhost:9000/api/AddOrders",myOrders)
+      await axios.post("http://localhost:9000/api/Orders/AddOrders",myOrders)
       .then(response=>{
 
           alert("Orders successfully Added")
       })
+
+      var myItems = {OrderedItems:cart}
+
+
+      await axios.post("http://localhost:9000/api/Orders/AddOrderItems",myItems)
+      .then(response=>{
+
+            alert("Items added to Order Details.."+response.data)
+        
+      })
+
+      setCart([])
 
 }
 
@@ -90,10 +102,10 @@ function Cart({GetOrderId,setGetOrderId,CustId,setCustId,CheckOutStatus,setCheck
         
         <div style={{display:'flex',flexDirection:'row',gap:'50px'}} >
           <h3 >Gross Total: <span  >{GTotal}</span></h3>
-          <button className='btn btn-dark' style = {{alignSelf:'self-start'}} onClick={Empty}>Empty</button>
-          <button className='btn btn-info' onClick={LogOut} >LogOut</button>
-          <button className='btn btn-primary' onClick={CheckOut} >CheckOut</button>
-          <button className='btn btn-danger' onClick={confirmOrder} >ConfirmOrder</button>
+          <button className='btn btn-dark' style = {{alignSelf:'self-start',height:'50px'}} onClick={Empty}>Empty</button>
+          <img src='/images/LogOut.jpg' height='70px' width='70px' style={{marginTop:'-10px'}} onClick={LogOut} ></img>
+          <button style={{height:'50px'}} className='btn btn-primary' onClick={CheckOut} >CheckOut</button>
+          <button style={{height:'50px'}}  className='btn btn-danger' onClick={confirmOrder} >ConfirmOrder</button>
         </div>
 
         <br></br>

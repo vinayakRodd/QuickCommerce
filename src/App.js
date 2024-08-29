@@ -11,12 +11,14 @@ import axios from 'axios';
 
 
 import OrderDetails from './Components/OrderDetails';
+import SignUp from './Components/SignUp';
 
 function App() {
 
   const [CustId,setCustId] = useState(0)
   const [UserName,setUserName] = useState("")
   const [GetOrderId,setGetOrderId] = useState(0);
+  const [SignUpStatus,setSignUpStatus] = useState(false)
 
   const [GTotal,setGTotal] = useState(0)
 
@@ -50,12 +52,12 @@ function App() {
   return (
     <div className="App">
 
-      
-      {(!loginStatus && userType === "" && CheckOutStatus === false) ? <Login CustId = {CustId} setCustId = {setCustId} UserName = {UserName} setUserName = {setUserName} userType = {userType} setUserType = {setUserType} loginStatus = {loginStatus} setLoginStatus = {setLoginStatus} />
-      :(userType === "Admin" && CheckOutStatus === false)? <AddItem  MyProducts = {MyProducts} setMyProducts = {setMyProducts} userType = {userType} setUserType = {setUserType} loginStatus = {loginStatus} setLoginStatus = {setLoginStatus}  />
-      :(userType === "Customer" && CheckOutStatus === false)?
-      
-      <div>
+
+      {(!loginStatus && userType === "" && CheckOutStatus === false && !SignUpStatus ) ? <Login SignUpStatus = {SignUpStatus} setSignUpStatus = {setSignUpStatus} CustId = {CustId} setCustId = {setCustId} UserName = {UserName} setUserName = {setUserName} userType = {userType} setUserType = {setUserType} loginStatus = {loginStatus} setLoginStatus = {setLoginStatus} />
+      :(userType === "Admin" && CheckOutStatus === false && SignUpStatus == false)? <AddItem  MyProducts = {MyProducts} setMyProducts = {setMyProducts} userType = {userType} setUserType = {setUserType} loginStatus = {loginStatus} setLoginStatus = {setLoginStatus}  />
+      :(userType === "Customer" && CheckOutStatus === false && SignUpStatus == false)? 
+
+        <div>
         <div style={{display:'flex',flexDirection:'row',gap:'50px'}}>
           <Heading/>
           <Counter  count = {count}   />
@@ -63,20 +65,22 @@ function App() {
         </div>
       
         <div style={{display:'flex',flexDirection:'row',gap:'50px'}}>
-          <Products MyProducts = {MyProducts} cart={cart} setCart = {setCart} count = {count} setCount = {setCount} GTotal = {GTotal} setGTotal = {setGTotal} />
+          <Products UserName={UserName} MyProducts = {MyProducts} cart={cart} setCart = {setCart} count = {count} setCount = {setCount} GTotal = {GTotal} setGTotal = {setGTotal} />
           <Cart GetOrderId = {GetOrderId} setGetOrderId = {setGetOrderId} CustId = {CustId} setCustId = {setCustId} CheckOutStatus = {CheckOutStatus} setCheckOutStatus = {setCheckOutStatus}  cart = {cart} setCart = {setCart} setCount = {setCount} count = {count} loginStatus = {loginStatus} setLoginStatus = {setLoginStatus} userType = {userType} setUserType = {setUserType} GTotal = {GTotal} setGTotal = {setGTotal}  />
           
         </div>
       </div>
       :
-      
+      (SignUpStatus == false && userType == "Customer" )?
       <OrderDetails GetOrderId = {GetOrderId} setGetOrderId={setGetOrderId}  cart = {cart} setCart = {setCart} CustId = {CustId} setCustId = {setCustId} UserName = {UserName} setUserName = {setUserName}  CheckOutStatus = {CheckOutStatus} setCheckOutStatus = {setCheckOutStatus}/>
-   
+      :""
     
 
-   
+
       
      }
+
+     {(SignUpStatus) ? <SignUp setUserType = {setUserType} setCheckOutStatus = {setCheckOutStatus}  setLoginStatus = {setLoginStatus} setSignUpStatus = {setSignUpStatus} />:""}
       
     </div>
   );

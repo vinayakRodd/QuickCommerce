@@ -1,6 +1,8 @@
 const express = require('express')
 const myDb = require('./MongoConnect')
 
+
+
 const router = express.Router()
 
 router.get("/authenticate/:UserName",async(req,resp)=>{
@@ -13,32 +15,43 @@ router.get("/authenticate/:UserName",async(req,resp)=>{
 
 
 
-// router.post("/getCustomerOrderDetails", async (req, resp) => {
+router.post("/GetCustomerDetails", async (req, resp) => {
     
-//     // Extract userName from the request body
-//     const customersCollection = myDb.collection("Customers")
-//     const UserData = req.body
-//     console.log("USer DData "+UserData)
-//     // Find the user by userName
-//     const user = await customersCollection.find({CustName:UserData.CustName}).toArray();
-//     console.log("User Name: "+user)
     
-//     resp.send(user)
-// });
+    const customersCollection = myDb.collection("Customers")
+    const UserData = req.body
+    console.log("Before..User Id "+UserData.CustId)
+    
+    const user = await customersCollection.find({CustId:UserData.CustId}).toArray();
+    console.log("After User Id: "+user)
+    
+    resp.send(user)
+});
+
+router.post("/SignUp",async(req,resp)=>{
 
 
-// router.post("/getCustomerOrders",async(req,resp)=>{
+
+    const customersCollection = myDb.collection("Customers")
+    const UserData = req.body
+
+    const countersCollection = myDb.collection("Counters")
+
+    const CounterObj = await countersCollection.find({}).toArray()
+
+    const CustId = CounterObj[1].CustId
+    console.log(CounterObj)
+
+    UserData.CustId = CustId
+
+    const res = await customersCollection.insertOne(UserData)
+
+    countersCollection.updateOne({CustId:CustId},{$set:{CustId:CustId+1}})
 
 
-//     const myData = req.body
-//     const OrderId = myData.OrderId
-//     const orderDetailsCollection = myDb.collection("OrderDetails")
+    resp.send(res)
 
-//     const res = await orderDetailsCollection.find({OrderId:OrderId}).toArray();
-
-//     resp.send(res)
-// })
-
+})
 
 
 

@@ -4,7 +4,7 @@ const myDb = require('./MongoConnect')
 const router = express.Router()
 
 
-router.post("/addOrders", async(req,resp)=>{
+router.post("/AddOrders", async(req,resp)=>{
     
     
 
@@ -16,15 +16,11 @@ router.post("/addOrders", async(req,resp)=>{
 
     const OrderId = OrderIdObj[0].OrderId
 
-
-
     const updatedOrders = myOrders.map(order => ({
         ...order,
         OrderId:OrderId
 
       }));
-
-
 
     const ordersCollection = myDb.collection("Orders")
 
@@ -45,7 +41,7 @@ router.post("/addOrders", async(req,resp)=>{
 
 
 
-router.post("/addOrderItems",async(req,resp)=>{
+router.post("/AddOrderItems",async(req,resp)=>{
     var Items = []
     Items = req.body.OrderedItems;
 
@@ -81,6 +77,18 @@ router.post("/addOrderItems",async(req,resp)=>{
 })
 
 
+router.post("/GetMoreDetails",async(req,resp)=>{
+
+    const ordersCollection = myDb.collection("Orders")
+    const UserData = req.body
+    
+    const res = await ordersCollection.find({CustId:UserData.CustId}).sort({ createdAt: -1 }).limit(5).toArray();
+    
+    resp.send(res)
+})
+
+
+
 
 
 router.post("/getCustomerOrders",async(req,resp)=>{
@@ -89,26 +97,15 @@ router.post("/getCustomerOrders",async(req,resp)=>{
     const myData = req.body
     const OrderId = myData.OrderId
     const orderDetailsCollection = myDb.collection("OrderDetails")
+    console.log("Fetching data thru OrderId in OrderDetails ",OrderId)
 
     const res = await orderDetailsCollection.find({OrderId:OrderId}).toArray();
-
+    console.log("After fetching OrderId is = ",res.OrderId)
     resp.send(res)
 })
 
 
 
-router.post("/getCustomerOrderDetails", async (req, resp) => {
-    
-    // Extract userName from the request body
-    const customersCollection = myDb.collection("Customers")
-    const UserData = req.body
-    console.log("USer DData "+UserData)
-    // Find the user by userName
-    const user = await customersCollection.find({CustName:UserData.CustName}).toArray();
-    console.log("User Name: "+user)
-    
-    resp.send(user)
-});
 
 
 
