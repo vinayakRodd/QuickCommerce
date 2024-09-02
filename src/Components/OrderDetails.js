@@ -73,6 +73,7 @@ function OrderDetails({GetOrderId,setGetOrderId,cart,setCart,CustId,setCustId,Us
       <div style={{display:'flex',flexDirection:'row',gap:'50px'}} >
         <button className='btn btn-warning' style={{height:'50px',width:'100px'}} onClick={BackToCart} >GoToCart</button>
         <button className='btn btn-danger' style={{height:'50px',width:'150px'}} onClick={GetOrderDetails} >ShowOrderDetails</button>
+        <button className='btn btn-primary' style={{height:'50px',width:'150px',marginLeft:'900px'}}  >Proceed To Pay</button>
       </div>
 
       <div>{CustomerDetails.map(Customer=>

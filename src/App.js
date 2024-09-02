@@ -59,14 +59,14 @@ function App() {
 
         <div>
         <div style={{display:'flex',flexDirection:'row',gap:'50px'}}>
-          <Heading/>
+          <Heading cart = {cart} setCart = {setCart} count = {count} setCount = {setCount} GTotal = {GTotal} setGTotal = {setGTotal} setLoginStatus = {setLoginStatus} userType = {userType}   setUserType = {setUserType} />
           <Counter  count = {count}   />
         
         </div>
       
         <div style={{display:'flex',flexDirection:'row',gap:'50px'}}>
-          <Products UserName={UserName} MyProducts = {MyProducts} cart={cart} setCart = {setCart} count = {count} setCount = {setCount} GTotal = {GTotal} setGTotal = {setGTotal} />
-          <Cart GetOrderId = {GetOrderId} setGetOrderId = {setGetOrderId} CustId = {CustId} setCustId = {setCustId} CheckOutStatus = {CheckOutStatus} setCheckOutStatus = {setCheckOutStatus}  cart = {cart} setCart = {setCart} setCount = {setCount} count = {count} loginStatus = {loginStatus} setLoginStatus = {setLoginStatus} userType = {userType} setUserType = {setUserType} GTotal = {GTotal} setGTotal = {setGTotal}  />
+          <Products setMyProducts = {setMyProducts} UserName={UserName} MyProducts = {MyProducts} cart={cart} setCart = {setCart} count = {count} setCount = {setCount} GTotal = {GTotal} setGTotal = {setGTotal} />
+          <Cart MyProducts = {MyProducts} setMyProducts = {setMyProducts} GetOrderId = {GetOrderId} setGetOrderId = {setGetOrderId} CustId = {CustId} setCustId = {setCustId} CheckOutStatus = {CheckOutStatus} setCheckOutStatus = {setCheckOutStatus}  cart = {cart} setCart = {setCart} setCount = {setCount} count = {count} loginStatus = {loginStatus} setLoginStatus = {setLoginStatus} userType = {userType} setUserType = {setUserType} GTotal = {GTotal} setGTotal = {setGTotal}  />
           
         </div>
       </div>

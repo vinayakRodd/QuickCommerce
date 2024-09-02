@@ -1,26 +1,16 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { useState,useEffect } from 'react'
+import { useState,useEffect, useRef } from 'react'
 import axios from 'axios';
 
-function Cart({GetOrderId,setGetOrderId,CustId,setCustId,CheckOutStatus,setCheckOutStatus,cart,setCart,setCount,count,loginStatus,setLoginStatus,userType,setUserType,GTotal,setGTotal}) {
+
+function Cart({MyProducts,setMyProducts,GetOrderId,setGetOrderId,CustId,setCustId,CheckOutStatus,setCheckOutStatus,cart,setCart,setCount,count,loginStatus,setLoginStatus,userType,setUserType,GTotal,setGTotal}) {
 
     const [OrderId,setOrderId] = useState(100);
-    
+    const SearchedProduct = useRef()
 
-    const Empty = () =>{
-        
-        cart.map(c=>c.Qty=1)
-        setCart([])
-        setCount(0)
-        setGTotal(0)
-    }
+  
 
-    const LogOut = () =>{
-
-      setLoginStatus(false)
-      setUserType("")
-    }
 
     const Increment = (product) =>{
 
@@ -61,20 +51,26 @@ function Cart({GetOrderId,setGetOrderId,CustId,setCustId,CheckOutStatus,setCheck
 
       const now = new Date();  // Creates a new Date object with the current date and time
 
-      setOrderId(OrderId+1)
-      setGetOrderId(OrderId+1)
+      // setOrderId(OrderId+1)
+
+      // setGetOrderId(OrderId+1)
       
       const currentDate = now.toLocaleDateString('en-GB');  // Formats the date (e.g., "8/23/2024")
       const currentTime = now.toLocaleTimeString();  // Formats the time (e.g., "4:35:18 PM")
 
-      const myOrders = [{GTotal:GTotal,Date:currentDate,Time:currentTime,OrderId:OrderId,CustId:CustId}]
+      const myOrder = {GTotal:GTotal,Date:currentDate,Time:currentTime,CustId:CustId}
 
+      console.log("MyOrder In FrontEnd:")
+      console.log(myOrder)
 
-
-      await axios.post("http://localhost:9000/api/Orders/AddOrders",myOrders)
+      await axios.post("http://localhost:9000/api/Orders/AddOrders",myOrder)
       .then(response=>{
 
           alert("Orders successfully Added")
+      })
+      .catch(err=>{
+
+        console.log(err)
       })
 
       var myItems = {OrderedItems:cart}
@@ -94,16 +90,32 @@ function Cart({GetOrderId,setGetOrderId,CustId,setCustId,CheckOutStatus,setCheck
     const CheckOut = () =>{
 
         setCheckOutStatus(true)
+        setMyProducts(MyProducts)
+    }
+
+    const getSearchedProduct = () =>{
+
+        var SearchItem = {Category:SearchedProduct.current.value}
+
+        axios.post("http://localhost:9000/api/Product/GetSearchedProducts",SearchItem)
+        .then(response=>{
+
+            setMyProducts(response.data)
+        })
+        .catch(err=>{
+
+          console.log(err)
+          
+        })
     }
     
-
+   
   return (
-    <div >
+    <div  >
         
-        <div style={{display:'flex',flexDirection:'row',gap:'50px'}} >
+        <div style={{display:'flex',flexDirection:'row',gap:'50px',marginTop:'20px',marginLeft:'100px'}} >
+          <input ref = {SearchedProduct} onKeyUp={getSearchedProduct} style={{height:'50px',width:'200px'}} placeholder='Search the Product' className='form-control '></input>
           <h3 >Gross Total: <span  >{GTotal}</span></h3>
-          <button className='btn btn-dark' style = {{alignSelf:'self-start',height:'50px'}} onClick={Empty}>Empty</button>
-          <img src='/images/LogOut.jpg' height='70px' width='70px' style={{marginTop:'-10px'}} onClick={LogOut} ></img>
           <button style={{height:'50px'}} className='btn btn-primary' onClick={CheckOut} >CheckOut</button>
           <button style={{height:'50px'}}  className='btn btn-danger' onClick={confirmOrder} >ConfirmOrder</button>
         </div>
@@ -111,7 +123,7 @@ function Cart({GetOrderId,setGetOrderId,CustId,setCustId,CheckOutStatus,setCheck
         <br></br>
         <ul style = {{listStyle:'none'}}>
             {cart.map(product => <li>
-            <div style={{display:'flex',flexDirection:'row'}} ><div style={{margin:'20px',width:'180px'}} >{product.Pid} {product.Pname} {product.Price} </div>
+            <div style={{display:'flex',flexDirection:'row'}} ><div style={{margin:'20px',width:'180px',marginLeft:'200px'}} >{product.Pid} {product.Pname} {product.Price} </div>
                 <div style={{display:'flex',flexDirection:'row'}}  ><button onClick={()=>Increment(product)}   className='btn btn-warning m-3' >+</button>
                     <div style={{width:'10px',margin:'20px'}}>{product.Qty}</div>
                     <button onClick={()=>Decrement(product)}   className='btn btn-danger m-3' >-</button>

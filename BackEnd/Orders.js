@@ -6,27 +6,25 @@ const router = express.Router()
 
 router.post("/AddOrders", async(req,resp)=>{
     
-    
 
-    var myOrders = []
-    myOrders = req.body
+    var myOrder
+    myOrder = req.body
+
+    console.log("MyOrder: ")
+    console.log(myOrder)
     
     const countersCollection = myDb.collection("Counters")
     const OrderIdObj = await countersCollection.find({}).toArray()
 
     const OrderId = OrderIdObj[0].OrderId
 
-    const updatedOrders = myOrders.map(order => ({
-        ...order,
-        OrderId:OrderId
-
-      }));
+    myOrder.OrderId = OrderId
 
     const ordersCollection = myDb.collection("Orders")
 
     try{
 
-        ordersCollection.insertMany(updatedOrders)
+        ordersCollection.insertOne(myOrder)
     }
 
     catch(err){
@@ -81,9 +79,10 @@ router.post("/GetMoreDetails",async(req,resp)=>{
 
     const ordersCollection = myDb.collection("Orders")
     const UserData = req.body
+
     
-    const res = await ordersCollection.find({CustId:UserData.CustId}).sort({ createdAt: -1 }).limit(5).toArray();
-    
+    const res = await ordersCollection.find({CustId:UserData.CustId}).sort({ OrderId: -1 }).limit(5).toArray();
+    console.log(res)
     resp.send(res)
 })
 
